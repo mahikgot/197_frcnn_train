@@ -75,4 +75,7 @@ def convert(json_fname, label_fname):
     return output
 with open('./dataset/annotations/instances_train.json', 'w') as outfile:
     json.dump(convert('./dataset/data/segmentation_train.json', './dataset/data/labels_train.csv'), outfile)
+with open('./dataset/annotations/instances_val.json', 'w') as outfile:
+    json.dump(convert('./dataset/data/segmentation_test.json', './dataset/data/labels_test.csv'), outfile)
+
 
