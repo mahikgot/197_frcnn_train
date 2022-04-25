@@ -136,6 +136,7 @@ def _coco_remove_images_without_annotations(dataset, cat_list=None):
         anno = dataset.coco.loadAnns(ann_ids)
         if cat_list:
             anno = [obj for obj in anno if obj["category_id"] in cat_list]
+        print(anno)
         if _has_valid_annotation(anno):
             ids.append(ds_idx)
     print(ids)
