@@ -23,6 +23,7 @@ def get_annotations(data_dict, labels_list):
             }
     object_keys = data_dict.keys()
     counter = 1
+    bound_counter = 0
     for file in object_keys:
         for region in data_dict[file]['regions']:
             category = copy.deepcopy(inner)
@@ -35,10 +36,13 @@ def get_annotations(data_dict, labels_list):
             category['image_id'] = int(data_dict[file]['filename'][:7])
             category['category_id'] = int(region['region_attributes']['Name'])
             bound_im = [region for region in labels_list if region['frame'] == data_dict[file]['filename']]
+            if bound_counter >= len(bound_im):
+                bound_counter = 0
             if len(bound_im):
-                category['bbox'].extend([int(bound_im[0]['xmin']), int(bound_im[0]['ymin']), int(bound_im[0]['xmax']) - int(bound_im[0]['xmin']), int(bound_im[0]['ymax']) - int(bound_im[0]['ymin'])])
+                category['bbox'].extend([int(bound_im[bound_counter]['xmin']), int(bound_im[bound_counter]['ymin']), int(bound_im[bound_counter]['xmax']) - int(bound_im[bound_counter]['xmin']), int(bound_im[bound_counter]['ymax']) - int(bound_im[bound_counter]['ymin'])])
             output['annotations'].append(category)
             counter += 1
+            bound_counter += 1
     return output['annotations']
 def get_categories():
     cat = [
