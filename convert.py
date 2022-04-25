@@ -84,5 +84,3 @@ with open('./dataset/annotations/instances_train.json', 'w') as outfile:
     json.dump(convert('./dataset/segmentation_train.json', './dataset/labels_train.csv'), outfile)
 with open('./dataset/annotations/instances_val.json', 'w') as outfile:
     json.dump(convert('./dataset/segmentation_test.json', './dataset/labels_test.csv'), outfile)
-
-print(mask.decode(outfile['annotations'][0]['segmentation']))
