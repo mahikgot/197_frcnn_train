@@ -28,13 +28,11 @@ def get_annotations(data_dict, labels_list):
     for file in object_keys:
         for region in data_dict[file]['regions']:
             category = copy.deepcopy(inner)
-            polygon = [[]]
+            category['segmentation'] = [[]]
             for x in region['shape_attributes']['all_points_x']:
-                polygon[0].append(int(x))
+                category['segmentation'][0].append(int(x))
             for y in region['shape_attributes']['all_points_y']:
-                polygon[0].append(int(y))
-            rle = mask.frPyObjects(polygon, 480, 640)[0]
-            category['segmentation'] = {'size': rle['size'], 'counts': list(rle['counts'])}
+                category['segmentation'][0].append(int(y))
             category['id'] = counter
             category['image_id'] = int(data_dict[file]['filename'][:7])
             category['category_id'] = int(region['region_attributes']['Name'])
@@ -80,9 +78,11 @@ def convert(json_fname, label_fname):
     output['categories'] = get_categories()
     output['info'] = {}
     output['licenses']  = {}
+
     return output
 with open('./dataset/annotations/instances_train.json', 'w') as outfile:
     json.dump(convert('./dataset/segmentation_train.json', './dataset/labels_train.csv'), outfile)
 with open('./dataset/annotations/instances_val.json', 'w') as outfile:
     json.dump(convert('./dataset/segmentation_test.json', './dataset/labels_test.csv'), outfile)
 
+print(mask.decode(outfile['annotations'][0]['segmentation']))
