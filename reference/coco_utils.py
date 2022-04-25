@@ -138,7 +138,7 @@ def _coco_remove_images_without_annotations(dataset, cat_list=None):
             anno = [obj for obj in anno if obj["category_id"] in cat_list]
         if _has_valid_annotation(anno):
             ids.append(ds_idx)
-
+    print(ids)
     dataset = torch.utils.data.Subset(dataset, ids)
     return dataset
 
