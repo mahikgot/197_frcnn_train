@@ -238,6 +238,7 @@ def get_coco(root, image_set, transforms, mode="instances"):
     img_folder = os.path.join(root, 'images')
     print(img_folder)
     ann_file = os.path.join(root, ann_file)
+    print(ann_file)
 
     dataset = CocoDetection(img_folder, ann_file, transforms=transforms)
 
