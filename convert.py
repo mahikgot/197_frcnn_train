@@ -33,6 +33,7 @@ def get_annotations(data_dict, labels_list):
                 category['segmentation'][0].append(int(x))
             for y in region['shape_attributes']['all_points_y']:
                 category['segmentation'][0].append(int(y))
+            category['area'] = int(mask.area(mask.frPyObjects(category['segmentation'], 480, 640))[0])
             category['id'] = counter
             category['image_id'] = int(data_dict[file]['filename'][:7])
             category['category_id'] = int(region['region_attributes']['Name'])
