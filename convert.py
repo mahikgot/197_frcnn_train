@@ -73,6 +73,6 @@ def convert(json_fname, label_fname):
     output['categories'] = get_categories()
 
     return output
-with open('./dataset/annotations/labels_train.json', 'w') as outfile:
+with open('./dataset/annotations/instances_train.json', 'w') as outfile:
     json.dump(convert('./dataset/data/segmentation_train.json', './dataset/data/labels_train.csv'), outfile)
 
