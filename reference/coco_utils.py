@@ -133,13 +133,11 @@ def _coco_remove_images_without_annotations(dataset, cat_list=None):
     ids = []
     for ds_idx, img_id in enumerate(dataset.ids):
         ann_ids = dataset.coco.getAnnIds(imgIds=img_id, iscrowd=None)
-        print(ann_ids)
         anno = dataset.coco.loadAnns(ann_ids)
         if cat_list:
             anno = [obj for obj in anno if obj["category_id"] in cat_list]
         if _has_valid_annotation(anno):
             ids.append(ds_idx)
-    print(ids)
     dataset = torch.utils.data.Subset(dataset, ids)
     return dataset
 
@@ -237,9 +235,7 @@ def get_coco(root, image_set, transforms, mode="instances"):
 
     img_folder, ann_file = PATHS[image_set]
     img_folder = os.path.join(root, 'images')
-    print(img_folder)
     ann_file = os.path.join(root, ann_file)
-    print(ann_file)
 
     dataset = CocoDetection(img_folder, ann_file, transforms=transforms)
 
