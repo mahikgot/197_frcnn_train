@@ -71,6 +71,8 @@ def convert(json_fname, label_fname):
     output['image'] = get_images(seg_train['_via_img_metadata'])
     output['annotation'] = get_annotations(seg_train['_via_img_metadata'], labels_list)
     output['categories'] = get_categories()
+    output['info'] = {}
+    output['licenses']  = {}
 
     return output
 with open('./dataset/annotations/instances_train.json', 'w') as outfile:
