@@ -68,7 +68,7 @@ def convert(json_fname, label_fname):
         for row in labels_iter:
             labels_list.append(row)
     output = {}
-    output['image'] = get_images(seg_train['_via_img_metadata'])
+    output['images'] = get_images(seg_train['_via_img_metadata'])
     output['annotation'] = get_annotations(seg_train['_via_img_metadata'], labels_list)
     output['categories'] = get_categories()
     output['info'] = {}
