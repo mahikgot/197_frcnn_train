@@ -192,7 +192,6 @@ def main(args):
         num_classes=num_classes, **kwargs
     )
     model.to(device)
-    print(model.backbone)
     if args.distributed and args.sync_bn:
         model = torch.nn.SyncBatchNorm.convert_sync_batchnorm(model)
 
