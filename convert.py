@@ -2,6 +2,7 @@ import numpy as np
 import csv
 import json
 import copy
+from pycocotools import mask
 
 def get_images(data_dict):
     object_keys = data_dict.keys()
@@ -84,4 +85,4 @@ with open('./dataset/annotations/instances_train.json', 'w') as outfile:
 with open('./dataset/annotations/instances_val.json', 'w') as outfile:
     json.dump(convert('./dataset/segmentation_test.json', './dataset/labels_test.csv'), outfile)
 
-
+print(mask.decode(outfile['annotations'][0]['segmentation'])
