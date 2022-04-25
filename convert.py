@@ -3,14 +3,6 @@ import csv
 import json
 import copy
 
-with open('segmentation_train.json', 'r') as f:
-    seg_train = json.load(f)
-with open('labels_train.csv', 'r') as f:
-    labels_iter = csv.DictReader(f)
-    labels_list = []
-    for row in labels_iter:
-        labels_list.append(row)
-
 def get_images(data_dict):
     object_keys = data_dict.keys()
     output = { 'images': [] }
@@ -82,5 +74,5 @@ def convert(json_fname, label_fname):
 
     return output
 with open('labels.json', 'w') as outfile:
-    json.dump(convert('segmentation_train.json', 'labels_train.csv'), outfile)
+    json.dump(convert('./dataset/segmentation_train.json', './dataset/labels_train.csv'), outfile)
 
