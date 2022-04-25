@@ -69,7 +69,7 @@ def convert(json_fname, label_fname):
             labels_list.append(row)
     output = {}
     output['images'] = get_images(seg_train['_via_img_metadata'])
-    output['annotation'] = get_annotations(seg_train['_via_img_metadata'], labels_list)
+    output['annotations'] = get_annotations(seg_train['_via_img_metadata'], labels_list)
     output['categories'] = get_categories()
     output['info'] = {}
     output['licenses']  = {}
