@@ -29,10 +29,10 @@ def get_annotations(data_dict, labels_list):
         for region in data_dict[file]['regions']:
             category = copy.deepcopy(inner)
             category['segmentation'] = [[]]
-            for x in region['shape_attributes']['all_points_x']:
-                category['segmentation'][0].append(int(x))
-            for y in region['shape_attributes']['all_points_y']:
-                category['segmentation'][0].append(int(y))
+            points = [region['shape_attributes']['all_points_x'],  region['shape_attributes']['all_points_y']]
+            for point in zip(points[0], points[1]):
+                category['segmentation'][0].append(point[0])
+                category['segmentation'][0].append(point[1])
             category['area'] = int(mask.area(mask.frPyObjects(category['segmentation'], 480, 640))[0])
             category['id'] = counter
             category['image_id'] = int(data_dict[file]['filename'][:7])
