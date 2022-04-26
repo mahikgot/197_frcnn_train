@@ -99,6 +99,7 @@ def download():
     targz.close
 
 def filter():
+    Path('./dataset').rmdir()
     Path('./dataset/images').mkdir(parents=True, exist_ok=True)
     Path('./dataset/annotations').mkdir(parents=True, exist_ok=True)
     Path('./dataset/old_annotations').mkdir(parents=True, exist_ok=True)
