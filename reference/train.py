@@ -32,8 +32,6 @@ from coco_utils import get_coco, get_coco_kp
 from engine import train_one_epoch, evaluate
 from group_by_aspect_ratio import GroupedBatchSampler, create_aspect_ratio_groups
 
-
-print(torch.__version__)
 def get_dataset(name, image_set, transform, data_path):
     paths = {"coco": (data_path, get_coco, 3), "coco_kp": (data_path, get_coco_kp, 2)}
     p, ds_fn, num_classes = paths[name]
@@ -190,7 +188,7 @@ def main(args):
         if args.rpn_score_thresh is not None:
             kwargs["rpn_score_thresh"] = args.rpn_score_thresh
     model = torchvision.models.detection.__dict__[args.model](
-        num_classes=num_classes, **kwargs
+        num_classes=num_classes+1, **kwargs
     )
     model.to(device)
     if args.distributed and args.sync_bn:
