@@ -12,7 +12,8 @@ def get_images(data_dict):
     object_keys = data_dict.keys()
     output = { 'images': [] }
     for file in object_keys:
-        output['images'].append({'file_name': data_dict[file]['filename'], 'id': int(data_dict[file]['filename'][:7]), 'width': 640, 'height': 480})
+        if len(data_dict[file]['regions']):
+            output['images'].append({'file_name': data_dict[file]['filename'], 'id': int(data_dict[file]['filename'][:7]), 'width': 640, 'height': 480})
     return output['images']
 
 def get_annotations(data_dict, labels_list):
