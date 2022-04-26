@@ -33,6 +33,7 @@ from engine import train_one_epoch, evaluate
 from group_by_aspect_ratio import GroupedBatchSampler, create_aspect_ratio_groups
 
 
+print(torch.__version__)
 def get_dataset(name, image_set, transform, data_path):
     paths = {"coco": (data_path, get_coco, 3), "coco_kp": (data_path, get_coco_kp, 2)}
     p, ds_fn, num_classes = paths[name]
