@@ -7,6 +7,7 @@ import gdown
 import os
 import tarfile
 from pathlib import Path
+import shutil
 
 def get_images(data_dict):
     object_keys = data_dict.keys()
@@ -98,8 +99,8 @@ def download():
     targz.extractall()
     targz.close
 
-def filter():
-    Path('./dataset').rmdir()
+def delete_unneeded():
+    shutil.rmtree('./dataset', ignore_errors=True)
     Path('./dataset/images').mkdir(parents=True, exist_ok=True)
     Path('./dataset/annotations').mkdir(parents=True, exist_ok=True)
     Path('./dataset/old_annotations').mkdir(parents=True, exist_ok=True)
@@ -117,7 +118,7 @@ def ayos(train_out, val_out):
     [Path('./dataset/images/' + f['file_name']).replace('./dataset/val/' + f['file_name']) for f in val_out['images']]
 
 download()
-filter()
+delete_unneeded()
 train_out = convert('./dataset/old_annotations/segmentation_train.json', './dataset/old_annotations/labels_train.csv')
 val_out = convert('./dataset/old_annotations/segmentation_test.json', './dataset/old_annotations/labels_test.csv')
 ayos(train_out, val_out)
