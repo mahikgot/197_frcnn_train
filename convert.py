@@ -9,12 +9,13 @@ import tarfile
 from pathlib import Path
 import shutil
 
-def get_images(data_dict):
+def get_images(data_dict, labels_list):
     object_keys = data_dict.keys()
     output = { 'images': [] }
     for file in object_keys:
         if len(data_dict[file]['regions']):
-            output['images'].append({'file_name': data_dict[file]['filename'], 'id': int(data_dict[file]['filename'][:7]), 'width': 640, 'height': 480})
+            if data_dict[file]['filename'] in (x['frame'] for x in labels_list):
+                output['images'].append({'file_name': data_dict[file]['filename'], 'id': int(data_dict[file]['filename'][:7]), 'width': 640, 'height': 480})
     return output['images']
 
 def get_annotations(data_dict, labels_list):
@@ -48,7 +49,8 @@ def get_annotations(data_dict, labels_list):
                 bound_counter = 0
             if len(bound_im):
                 category['bbox'].extend([int(bound_im[bound_counter]['xmin']), int(bound_im[bound_counter]['ymin']), int(bound_im[bound_counter]['xmax']) - int(bound_im[bound_counter]['xmin']), int(bound_im[bound_counter]['ymax']) - int(bound_im[bound_counter]['ymin'])])
-            output['annotations'].append(category)
+            if len(category['bbox']):
+                output['annotations'].append(category)
             counter += 1
             bound_counter += 1
     return output['annotations']
@@ -80,7 +82,7 @@ def convert(json_fname, label_fname):
         for row in labels_iter:
             labels_list.append(row)
     output = {}
-    output['images'] = get_images(seg_train['_via_img_metadata'])
+    output['images'] = get_images(seg_train['_via_img_metadata'], labels_list)
     output['annotations'] = get_annotations(seg_train['_via_img_metadata'], labels_list)
     output['categories'] = get_categories()
     output['info'] = {}
