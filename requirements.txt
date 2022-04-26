@@ -1,0 +1,8 @@
+torch
+torchvision
+torchaudio
+numpy
+pycocotools
+gdown
+cython
+matplotlib
