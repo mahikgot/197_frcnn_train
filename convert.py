@@ -89,7 +89,8 @@ def convert(json_fname, label_fname):
 def download():
     url = 'https://drive.google.com/uc?id=1AdMbVK110IKLG7wJKhga2N2fitV1bVPA'
     output = 'drinks.tar.gz'
-    gdown.download(url, output, quiet=False)
+    if not Path('./' + output).exists:
+        gdown.download(url, output, quiet=False)
 
 
     targz = tarfile.open('drinks.tar.gz', 'r:gz')
@@ -106,11 +107,21 @@ def filter():
     [f.replace('./dataset/old_annotations/' + f.name) for f in Path('./drinks').glob('*')]
     Path('./drinks').rmdir()
 
+def ayos(train_out, val_out):
+    Path('./dataset/train').mkdir(parents=True, exist_ok=True)
+    Path('./dataset/val').mkdir(parents=True, exist_ok=True)
+
+    [Path('./dataset/images/' + f['file_name']).replace('./dataset/train/' + f['file_name']) for f in train_out['images']]
+    [Path('./dataset/images/' + f['file_name']).replace('./dataset/val/' + f['file_name']) for f in val_out['images']]
+
 download()
 filter()
-with open('./dataset/annotations/instances_train.json', 'w') as outfile:
-    json.dump(convert('./dataset/old_annotations/segmentation_train.json', './dataset/old_annotations/labels_train.csv'), outfile)
-with open('./dataset/annotations/instances_val.json', 'w') as outfile:
-    json.dump(convert('./dataset/old_annotations/segmentation_test.json', './dataset/old_annotations/labels_test.csv'), outfile)
+train_out = convert('./dataset/old_annotations/segmentation_train.json', './dataset/old_annotations/labels_train.csv')
+val_out = convert('./dataset/old_annotations/segmentation_test.json', './dataset/old_annotations/labels_test.csv')
+ayos(train_out, val_out)
 
+with open('./dataset/annotations/instances_train.json', 'w') as outfile:
+    json.dump(train_out, outfile)
+with open('./dataset/annotations/instances_val.json', 'w') as outfile:
+    json.dump(val_out, outfile)
 
