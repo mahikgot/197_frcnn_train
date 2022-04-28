@@ -2,3 +2,6 @@ dataset/
 labels.json
 detection/__pycache__
 drinks.tar.gz
+checkpoint.pth
+input/
+output/
