@@ -50,7 +50,7 @@ def list_to_mp4(frames, fps, name):
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     video = cv2.VideoWriter('./output/' + name[:-4] + '_out.mp4', fourcc, fps, videodims)
     for i in frames:
-        video.write(np.array(i))
+        video.write(cv2.cvtColor(np.array(i), cv2.COLOR_BGR2RGB))
     video.release()
 
 
