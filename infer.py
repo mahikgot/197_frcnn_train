@@ -113,12 +113,12 @@ if __name__=='__main__':
     img_path = [f for f in Path(args.path).glob('*.jpg')]
     img_name = [f.name for f in img_path]
     img_data = [Image.open(f) for f in img_path]
-    img_loader = DataLoader(dataset=Img_Input(img_data, transform), batch_size=args.batch_size)
+    img_loader = DataLoader(dataset=Img_Input(img_data, img_transform), batch_size=args.batch_size)
 
     vid_transform = torchvision.transforms.Compose([torchvision.transforms.Resize(480), torchvision.transforms.ToTensor()])
     vids_name = [f for f in Path(args.path).glob('*.mp4')]
     vids_data = [cv2.VideoCapture(args.path+ '/' + f.name) for f in vids_name]
-    vids_loader = [[DataLoader(dataset=Vid_Input(vid, transform), batch_size=args.batch_size)] for vid in vids_data]
+    vids_loader = [[DataLoader(dataset=Vid_Input(vid, vid_transform), batch_size=args.batch_size)] for vid in vids_data]
 
     checkpoint = torch.load('checkpoint.pth')
     model = torchvision.models.detection.fasterrcnn_resnet50_fpn(num_classes=4, weights_backbone='ResNet50_Weights.IMAGENET1K_V1')
