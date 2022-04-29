@@ -36,29 +36,15 @@ class Vid_Input(Dataset):
         return int(self.vid.get(cv2.CAP_PROP_FRAME_COUNT))
 
 class Img_Input(Dataset):
-    def __init__(self, image, transform):
-        self.image = image
+    def __init__(self, images, transform):
+        self.images = images
         self.transform = transform
     def __getitem__(self, index):
-        return self.transform(self.image[index]).to(torch.device('cuda:0'))
+        image = Image.open(self.images[index])
+        return self.transform(image).to(torch.device('cuda:0'))
 
     def __len__(self):
-        return len(self.image)
-
-def convert_to_img_data(vid, new_fps):
-    success, frame = vid.read()
-    old_fps = vid.get(cv2.CAP_PROP_FPS)
-    fps = old_fps/new_fps
-    images=[]
-    frame_number = 0
-    while success:
-        image = Image.fromarray(frame)
-        images.append(image)
-        vid.set(cv2.CAP_PROP_POS_FRAMES, frame_number)
-        success, frame = vid.read()
-        frame_number += fps
-
-    return images, new_fps
+        return len(self.images)
 
 def list_to_mp4(frames, fps, name):
     videodims = frames[0].size
@@ -112,8 +98,7 @@ if __name__=='__main__':
     img_transform = torchvision.transforms.Compose([torchvision.transforms.Resize(480), torchvision.transforms.ToTensor()])
     img_path = [f for f in Path(args.path).glob('*.jpg')]
     img_name = [f.name for f in img_path]
-    img_data = [Image.open(f) for f in img_path]
-    img_loader = DataLoader(dataset=Img_Input(img_data, img_transform), batch_size=args.batch_size)
+    img_loader = DataLoader(dataset=Img_Input(img_path, img_transform), batch_size=args.batch_size)
 
     vid_transform = torchvision.transforms.Compose([torchvision.transforms.Resize(480), torchvision.transforms.ToTensor()])
     vids_name = [f for f in Path(args.path).glob('*.mp4')]
