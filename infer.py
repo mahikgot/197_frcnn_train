@@ -15,6 +15,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--input-path', default='./input', type=str, dest='path')
 parser.add_argument('--clean', default=False, type=bool, dest='clean')
 parser.add_argument('--batch-size', default=2, type=int, dest='batch_size')
+parser.add_argument('--num-workers', default=2, type=int, dest='num_workers')
 
 args = parser.parse_args()
 
@@ -59,15 +60,14 @@ def infer(model, dataloader, path_list, vid=False, fps=None):
     img_ctr = 0
     for batch in dataloader:
         preds = model(batch)
-        labels = [[pred["labels"].cpu().detach().numpy(), pred["scores"].cpu().detach().numpy()] for pred in preds]
-        boxes = [pred["boxes"].cpu().detach().numpy() for pred in preds]
 
         transform = torchvision.transforms.ToPILImage()
-        for img_idx, img in enumerate(boxes):
-            image = transform(batch[img_idx])
-            for cat_idx, cat in enumerate(labels[img_idx][0]):
-                if labels[img_idx][1][cat_idx] >= 0.98:
-                    bbox = img[cat_idx]
+        for im in range(len(batch)):
+            image = transform(batch[im])
+            for idx, score in enumerate(preds[im]['scores']):
+                if score >= 0.98:
+                    bbox = [preds[im]['boxes'][idx][i].item() for i in range(4)]
+                    cat = preds[im]['labels'][idx].item()
                     if cat == 1:
                         color = 'blue'
                         text = 'summit'
@@ -98,7 +98,7 @@ if __name__=='__main__':
     img_transform = torchvision.transforms.Compose([torchvision.transforms.Resize(480), torchvision.transforms.ToTensor()])
     img_path = [f for f in Path(args.path).glob('*.jpg')]
     img_name = [f.name for f in img_path]
-    img_loader = DataLoader(dataset=Img_Input(img_path, img_transform), batch_size=args.batch_size)
+    img_loader = DataLoader(dataset=Img_Input(img_path, img_transform), batch_size=args.batch_size, num_workers=args.num_workers)
 
     vid_transform = torchvision.transforms.Compose([torchvision.transforms.Resize(480), torchvision.transforms.ToTensor()])
     vids_name = [f for f in Path(args.path).glob('*.mp4')]
