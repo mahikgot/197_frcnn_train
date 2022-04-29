@@ -13,7 +13,6 @@ import matplotlib.pyplot as plt
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--input-path', default='./input', type=str, dest='path')
-parser.add_argument('--new-fps', default='24', type=int, dest='new_fps')
 parser.add_argument('--clean', default=False, type=bool, dest='clean')
 parser.add_argument('--batch-size', default=2, type=int, dest='batch_size')
 
@@ -95,6 +94,7 @@ def infer(model, dataloader, path_list, vid=False, fps=None):
 
 if __name__=='__main__':
     begin = time.time()
+
     img_transform = torchvision.transforms.Compose([torchvision.transforms.Resize(480), torchvision.transforms.ToTensor()])
     img_path = [f for f in Path(args.path).glob('*.jpg')]
     img_name = [f.name for f in img_path]
@@ -118,6 +118,7 @@ if __name__=='__main__':
     with torch.no_grad():
         infer(model, img_loader, img_name)
         for idx, loader in enumerate(vids_loader):
-            infer(model, loader[0], vids_name[idx].name, vid=True, fps=args.new_fps)
+            fps = vids_data[idx].get(cv2.CAP_PROP_FPS)
+            infer(model, loader[0], vids_name[idx].name, vid=True, fps=fps)
     end = time.time()
-    print(end-begin)
+    print('time:', end-begin)
