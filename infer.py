@@ -40,18 +40,21 @@ def infer(model, dataloader, path_list, data_list):
         labels = [[pred["labels"].cpu().detach().numpy(), pred["scores"].cpu().detach().numpy()] for pred in preds]
         boxes = [pred["boxes"].cpu().detach().numpy() for pred in preds]
 
-        print(preds)
         for img_idx, img in enumerate(boxes):
             for cat_idx, cat in enumerate(labels[img_idx][0]):
-                if labels[img_idx][1][cat_idx] >= 0.95:
+                if labels[img_idx][1][cat_idx] >= 0.99:
                     bbox = img[cat_idx]
                     if cat == 1:
                         color = 'blue'
+                        text = 'summit'
                     elif cat == 2:
                         color = 'red'
+                        text  = 'coke'
                     else:
                         color = 'yellow'
-                    draw = ImageDraw.Draw(data_list[img_ctr]).rectangle(bbox, outline=color)
+                        text = 'juice'
+                    ImageDraw.Draw(data_list[img_ctr]).rectangle(bbox, outline=color, width=2)
+                    ImageDraw.Draw(data_list[img_ctr]).text((bbox[0], bbox[1]), text=text, fill='black')
             data_list[img_ctr].save('./output/' + path_list[img_ctr].name[:-4] + '_out.jpg')
             img_ctr += 1
 
