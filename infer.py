@@ -14,8 +14,8 @@ import matplotlib.pyplot as plt
 parser = argparse.ArgumentParser()
 parser.add_argument('--input-path', default='./input', type=str, dest='path')
 parser.add_argument('--clean', default=False, type=bool, dest='clean')
-parser.add_argument('--batch-size', default=2, type=int, dest='batch_size')
-parser.add_argument('--num-workers', default=2, type=int, dest='num_workers')
+parser.add_argument('--batch-size', default=4, type=int, dest='batch_size')
+parser.add_argument('--num-workers', default=0, type=int, dest='num_workers')
 
 args = parser.parse_args()
 
@@ -88,7 +88,6 @@ def infer(model, dataloader, path_list, vid=False, fps=None):
             else:
                 image.save('./output/' + path_list[img_ctr][:-4] + '_out.jpg')
             img_ctr += 1
-
     if vid:
         list_to_mp4(frames, fps, path_list)
 
