@@ -23,17 +23,33 @@ class Vid_Input(Dataset):
         super(Vid_Input).__init__()
         self.vid = vid
         self.transform = transform
+        self.get_ar()
+
 
     def __getitem__(self, idx):
         success, frame = self.vid.read()
         if success:
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            frame = cv2.copyMakeBorder(frame, self.border_v, self.border_v, self.border_h, self.border_h, cv2.BORDER_CONSTANT, 0)
+            frame = cv2.resize(frame, (640, 480))
             image = Image.fromarray(frame)
             return self.transform(image).to(torch.device('cuda:0'))
 
     def __len__(self):
         return int(self.vid.get(cv2.CAP_PROP_FRAME_COUNT))
 
+    def get_ar(self):
+        _, frame = self.vid.read()
+        self.vid.set(cv2.CAP_PROP_POS_FRAMES, -1)
+        # https://stackoverflow.com/questions/48437179/opencv-resize-by-filling
+        self.border_v = 0
+        self.border_h = 0
+        height = frame.shape[0]
+        width = frame.shape[1]
+        if (0.75) >= (height/width):
+            self.border_v = int((((0.75)*width)-height)/2)
+        else:
+            self.border_h = int((((4/3)*height)-width)/2)
 class Img_Input(Dataset):
     def __init__(self, images, transform):
         self.images = images
@@ -98,7 +114,7 @@ if __name__=='__main__':
     img_name = [f.name for f in img_path]
     img_loader = DataLoader(dataset=Img_Input(img_path, img_transform), batch_size=args.batch_size, num_workers=args.num_workers)
 
-    vid_transform = torchvision.transforms.Compose([torchvision.transforms.Resize(480), torchvision.transforms.ToTensor()])
+    vid_transform = torchvision.transforms.Compose([torchvision.transforms.ToTensor()])
     vids_name = [f for f in Path(args.path).glob('*.mp4')]
     vids_data = [cv2.VideoCapture(args.path+ '/' + f.name) for f in vids_name]
     vids_loader = [[DataLoader(dataset=Vid_Input(vid, vid_transform), batch_size=args.batch_size)] for vid in vids_data]
