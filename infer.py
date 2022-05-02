@@ -1,7 +1,7 @@
 import torchvision
 import numpy as np
 import torch
-from torch.utils.data import Dataset, DataLoader, IterableDataset
+from torch.utils.data import Dataset, DataLoader
 from PIL import Image, ImageDraw, ImageOps
 import argparse
 from pathlib import Path
@@ -9,7 +9,6 @@ import cv2
 from collections import deque
 import time
 import shutil
-import matplotlib.pyplot as plt
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--input-path', default='./input', type=str, dest='path')
