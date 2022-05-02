@@ -3,7 +3,7 @@ import csv
 import json
 import copy
 from pycocotools import mask
-import gdown
+from requests import get
 import os
 import tarfile
 from pathlib import Path
@@ -87,11 +87,11 @@ def convert(json_fname, label_fname):
     return output
 
 def download():
-    url = 'https://drive.google.com/uc?id=1AdMbVK110IKLG7wJKhga2N2fitV1bVPA'
+    url = 'https://github.com/mahikgot/197_frcnn_train/releases/download/dataset/drinks.tar.gz'
     output = 'drinks.tar.gz'
-    if not Path('./' + output).exists:
-        gdown.download(url, output, quiet=False)
-
+    file = get(url)
+    with open(output, 'wb') as f:
+        f.write(file.content)
 
     targz = tarfile.open('drinks.tar.gz', 'r:gz')
     targz.extractall()
