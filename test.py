@@ -1,5 +1,5 @@
-subprocess.run(['pip', 'install', '-r', 'requirements.txt'])
 import subprocess
+subprocess.run(['pip', 'install', '-r', 'requirements.txt'])
 from requests import get
 
 def download():
