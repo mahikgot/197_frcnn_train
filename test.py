@@ -1,3 +1,4 @@
+subprocess.run(['pip', 'install', '-r', 'requirements.txt'])
 import subprocess
 from requests import get
 
@@ -10,7 +11,6 @@ def download():
         f.write(file.content)
     print('Done downloading')
 
-subprocess.run(['pip', 'install', '-r', 'requirements.txt'])
 subprocess.run(['pip', 'install', '--pre', 'torch', 'torchvision', '--extra-index-url', 'https://download.pytorch.org/whl/nightly/cu113', '-U'])
 download()
 subprocess.run(['python', 'convert.py'])
