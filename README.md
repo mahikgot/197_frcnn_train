@@ -4,7 +4,7 @@ Mark Lewis R. Guiang
 train Faster R-CNN with given drinks dataset 
 https://arxiv.org/abs/1506.01497
 ## Execution
-Please use Python 3.10.0
+Requires cuda 11.3
 ### Evaluation of Pre-Trained Model
 - Installs prerequisites
 - Downloads Pre-Trained Weights
