@@ -17,3 +17,9 @@ Trains pre-trained model from epoch 26 to 27
 ```sh
 python train.py
 ```
+##Inference
+Put .jpg and .mp4 files inside 'input' folder in root directory of project
+```sh
+python infer.py
+```
+Output files located in 'output' folder
