@@ -23,3 +23,5 @@ Put .jpg and .mp4 files inside 'input' folder in root directory of project
 python infer.py
 ```
 Output files located in 'output' folder
+Example Output from video input:
+https://drive.google.com/file/d/1LNPfI7K9tvTqfzYjfVFKu_iO_d30IqRT/view?usp=sharing
